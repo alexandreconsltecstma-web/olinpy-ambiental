@@ -1,0 +1,14 @@
+{
+ "versao": 1,
+ "usuarios": [
+  {
+   "login": "alexandre",
+   "nome": "Alexandre",
+   "papel": "admin",
+   "sal": "2IjMV8NxIRObiDwKv7dC7A==",
+   "iter": 310000,
+   "chave": "i0thAE/R7+weq1/yhnb95Y7iDMZHQ58qdjLYezlxtV8wYcLFGsMitfWCLVBgaGmGwxLzPtVUTmLn/I6a",
+   "criado": "2026-11-26"
+  }
+ ]
+}
