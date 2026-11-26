@@ -9,6 +9,6 @@ segurança e saúde do trabalho, regularização (alvarás, vigilância sanitár
   e cria tarefas a pedido. Tudo o que a IA escreve é minuta: o técnico revisa e decide.
 - Empresas, prazos de todas as áreas, tarefas com cronômetro, automações, vistoria de campo com fotos e GPS,
   propostas, calculadoras (prazos, APP, tanque séptico, UTM), legislação, indicadores e histórico.
-- Condicionantes (painel de licenças) e GeoMapa (mapas técnicos para o QGIS) integrados.
+- GeoMapa (mapas técnicos para o QGIS) integrado.
 
 Projeto ligado ao Projeto Integrador (SENAC – Técnico em Meio Ambiente) e à rotina da PA Consultoria Ambiental.
