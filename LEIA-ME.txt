@@ -1,0 +1,1 @@
+Olinpy - assistente para consultorias. Veja README.md.
