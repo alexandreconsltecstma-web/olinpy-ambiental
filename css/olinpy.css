@@ -42,7 +42,7 @@ h1, h2, h3 { letter-spacing: -.01em; }
 
 /* ── campos e botões ─────────────────────────────────────────────────── */
 label { display: flex; flex-direction: column; gap: 5px; font-size: .8rem; font-weight: 500; color: var(--suave); }
-input[type=text], input[type=password], input[type=search], input[type=number], input[type=date], input[type=email], input[type=tel], select, textarea {
+input:not([type]), input[type=text], input[type=password], input[type=search], input[type=number], input[type=date], input[type=email], input[type=tel], select, textarea {
   font-size: .9rem; background: var(--campo); border: 1px solid var(--borda-forte); border-radius: 8px; padding: 9px 11px; width: 100%;
   color: var(--texto); transition: border-color .15s, box-shadow .15s; }
 textarea { resize: vertical; min-height: 70px; line-height: 1.45; }
