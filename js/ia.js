@@ -255,7 +255,13 @@ Regras:
   }
   function exportar(texto, tipo) {
     const html = documentoHTML(texto);
-    if (tipo === "word") { Olinpy.baixar(`minuta-${HOJE_ISO}.doc`, "﻿" + html, "application/msword"); return; }
+    if (tipo === "word") {
+      const C = Olinpy.dados.config, aviso = `\n\nMinuta gerada com apoio do assistente Olinpy em ${fd(HOJE_ISO)} – revisar e validar antes de usar.`;
+      const doc = () => Olinpy.baixar(`minuta-${HOJE_ISO}.doc`, "\ufeff" + html, "application/msword");
+      if (typeof gerarDocx === "function") gerarDocx(texto + aviso, [C.escritorio, C.cidade].filter(Boolean).join(" · ")).then((b) => Olinpy.baixar(`minuta-${HOJE_ISO}.docx`, b)).catch(doc);
+      else doc();
+      return;
+    }
     const w = window.open("", "_blank"); if (!w) { Olinpy.toast("Permita pop-ups para imprimir."); return; }
     w.document.write(html); w.document.close(); w.focus(); setTimeout(() => w.print(), 400);
   }

@@ -40,6 +40,8 @@ const ICONES = {
   config: '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/>',
   mais: '<path d="M12 5v14M5 12h14"/>', alerta: '<path d="M12 3 2 20h20L12 3z"/><path d="M12 10v4M12 17.5v.01"/>',
   info: '<circle cx="12" cy="12" r="9"/><path d="M12 8v.01M11 12h1v5h1"/>', relogio: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  documentos: '<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M8 13h8M8 17h5"/><path d="M17 15l2 2-2 2"/>',
+  conversor: '<path d="M4 7h13l-3-3M20 17H7l3 3"/>',
   externo: '<path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/>', busca: '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>',
 };
 const ico = (n, c = "") => `<svg ${c ? `class="${c}" ` : ""}viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONES[n] || AREAS[n]?.icone || ""}</svg>`;
@@ -197,12 +199,13 @@ const Olinpy = (() => {
   const MENU = [
     ["Principal", [["inicio", "Início"], ["assistente", "Assistente IA"], ["empresas", "Empresas"], ["prazos", "Prazos e vencimentos"], ["tarefas", "Tarefas"], ["automacoes", "Automações"]]],
     ["Áreas", [["area-ma", "Meio Ambiente"], ["area-sst", "Segurança do Trabalho"], ["area-reg", "Regularização e alvarás"], ["area-sg", "Sistemas de gestão"]]],
-    ["Ferramentas", [["mapas", "Mapas (GeoMapa)"], ["vistoria", "Vistoria de campo"], ["propostas", "Propostas"], ["calculadoras", "Calculadoras"], ["legislacao", "Legislação"]]],
+    ["Ferramentas", [["documentos", "Documentos automáticos"], ["conversor", "PDF ⇄ Word"], ["mapas", "Mapas (GeoMapa)"], ["vistoria", "Vistoria de campo"], ["propostas", "Propostas"], ["calculadoras", "Calculadoras"], ["legislacao", "Legislação"]]],
     ["Gestão", [["indicadores", "Indicadores"], ["historico", "Histórico"], ["usuarios", "Usuários"], ["config", "Configurações"]]],
   ];
   const TITULOS = { inicio: ["Início", ""], assistente: ["Assistente IA", "Pergunte, peça textos e consulte os dados do escritório"], empresas: ["Empresas", "Clientes e empreendimentos"],
     prazos: ["Prazos e vencimentos", "Todas as áreas num só lugar"], tarefas: ["Tarefas", "Quem faz o quê e até quando"], automacoes: ["Automações", "O que o Olinpy faz sozinho"],
-mapas: ["Mapas", "GeoMapa: mapas técnicos e pacote para o QGIS"], vistoria: ["Vistoria de campo", "Checklist e relatório fotográfico"],
+mapas: ["Mapas", "GeoMapa: mapas técnicos e pacote para o QGIS"], documentos: ["Documentos automáticos", "Modelos preenchidos com os dados da empresa, em Word ou PDF"],
+    conversor: ["PDF ⇄ Word", "Converter, juntar PDFs e transformar fotos em PDF"], vistoria: ["Vistoria de campo", "Checklist e relatório fotográfico"],
     propostas: ["Propostas", "Orçamentos de serviços"], calculadoras: ["Calculadoras", "Ferramentas técnicas rápidas"], legislacao: ["Legislação", "Normas e consultas oficiais"],
     indicadores: ["Indicadores", "Tempo economizado e produtividade"], historico: ["Histórico", "Registro de alterações"], usuarios: ["Usuários", "Acesso da equipe"], config: ["Configurações", "Escritório, IA e dados"] };
 
@@ -271,7 +274,7 @@ mapas: ["Mapas", "GeoMapa: mapas técnicos e pacote para o QGIS"], vistoria: ["V
           ${porArea.map(([a, n]) => `<a class="atalho" href="#area-${a}" style="margin-bottom:8px"><span class="ic" style="background:${AREAS[a].cor}1a;color:${AREAS[a].cor}">${ico(a)}</span><div><b>${h(AREAS[a].nome)}</b><span>${plural(n, "prazo", "prazos")}</span></div></a>`).join("")}</div></div>
         <div class="card c8"><div class="card-cab"><h3>Atalhos</h3></div><div class="card-corpo"><div class="atalhos">
           ${[["assistente", "Assistente IA", "Textos, dúvidas e dados"], ["prazos", "Prazos e vencimentos", "Licenças, documentos e obrigações"], ["mapas", "Mapas", "Localização, AID/AII, hidrografia…"],
-             ["vistoria", "Vistoria de campo", "Checklist e fotos com GPS"], ["propostas", "Proposta", "Orçamento em PDF"], ["calculadoras", "Calculadoras", "APP, fossa, prazos, coordenadas"]]
+             ["vistoria", "Vistoria de campo", "Checklist e fotos com GPS"], ["documentos", "Documentos", "Requerimentos, ofícios, fichas em Word/PDF"], ["conversor", "PDF ⇄ Word", "Converter e juntar PDFs"], ["calculadoras", "Calculadoras", "APP, fossa, prazos, coordenadas"]]
             .map(([r, b, s]) => `<a class="atalho" href="#${r}"><span class="ic">${ico(r)}</span><div><b>${b}</b><span>${s}</span></div></a>`).join("")}
         </div></div></div>
       </div></div>`;
