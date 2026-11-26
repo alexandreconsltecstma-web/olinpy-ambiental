@@ -48,7 +48,7 @@ const PAPEIS = { admin: "Administrador", tecnico: "Técnico", consulta: "Somente
 
 const Olinpy = (() => {
   let S = null;            // sessão
-  let BASE = [];           // licenças do escritório (dados/escritorio.enc)
+  const BASE = [];         // as condicionantes da PA ficam só no Painel do site da PA; aqui as licenças entram como documentos
   let DADOS = null;        // empresas, itens, tarefas, historico, medicoes, config (local, cifrado)
   let rotaAtual = "inicio";
   const PADRAO = () => ({ versao: 1, empresas: [], itens: [], tarefas: [], historico: [], medicoes: [], propostas: [],
@@ -63,7 +63,6 @@ const Olinpy = (() => {
 
   /* ── dados ─────────────────────────────────────────────────────────── */
   async function carregar() {
-    try { BASE = await OlinpyCripto.jsonProtegido("dados/escritorio.enc"); } catch (e) { BASE = []; console.warn("escritório:", e.message); }
     DADOS = await OlinpyCripto.ler("dados", null);
     if (!DADOS) {
       try { DADOS = await OlinpyCripto.jsonProtegido("dados/equipe.enc"); toast("Dados da equipe carregados."); } catch (e) { DADOS = PADRAO(); }
@@ -198,12 +197,12 @@ const Olinpy = (() => {
   const MENU = [
     ["Principal", [["inicio", "Início"], ["assistente", "Assistente IA"], ["empresas", "Empresas"], ["prazos", "Prazos e vencimentos"], ["tarefas", "Tarefas"], ["automacoes", "Automações"]]],
     ["Áreas", [["area-ma", "Meio Ambiente"], ["area-sst", "Segurança do Trabalho"], ["area-reg", "Regularização e alvarás"], ["area-sg", "Sistemas de gestão"]]],
-    ["Ferramentas", [["condicionantes", "Condicionantes"], ["mapas", "Mapas (GeoMapa)"], ["vistoria", "Vistoria de campo"], ["propostas", "Propostas"], ["calculadoras", "Calculadoras"], ["legislacao", "Legislação"]]],
+    ["Ferramentas", [["mapas", "Mapas (GeoMapa)"], ["vistoria", "Vistoria de campo"], ["propostas", "Propostas"], ["calculadoras", "Calculadoras"], ["legislacao", "Legislação"]]],
     ["Gestão", [["indicadores", "Indicadores"], ["historico", "Histórico"], ["usuarios", "Usuários"], ["config", "Configurações"]]],
   ];
   const TITULOS = { inicio: ["Início", ""], assistente: ["Assistente IA", "Pergunte, peça textos e consulte os dados do escritório"], empresas: ["Empresas", "Clientes e empreendimentos"],
     prazos: ["Prazos e vencimentos", "Todas as áreas num só lugar"], tarefas: ["Tarefas", "Quem faz o quê e até quando"], automacoes: ["Automações", "O que o Olinpy faz sozinho"],
-    condicionantes: ["Condicionantes", "Painel de licenças e entregas"], mapas: ["Mapas", "GeoMapa: mapas técnicos e pacote para o QGIS"], vistoria: ["Vistoria de campo", "Checklist e relatório fotográfico"],
+mapas: ["Mapas", "GeoMapa: mapas técnicos e pacote para o QGIS"], vistoria: ["Vistoria de campo", "Checklist e relatório fotográfico"],
     propostas: ["Propostas", "Orçamentos de serviços"], calculadoras: ["Calculadoras", "Ferramentas técnicas rápidas"], legislacao: ["Legislação", "Normas e consultas oficiais"],
     indicadores: ["Indicadores", "Tempo economizado e produtividade"], historico: ["Histórico", "Registro de alterações"], usuarios: ["Usuários", "Acesso da equipe"], config: ["Configurações", "Escritório, IA e dados"] };
 
@@ -271,7 +270,7 @@ const Olinpy = (() => {
         <div class="card c4"><div class="card-cab"><h3>Próximos 30 dias por área</h3></div><div class="card-corpo">
           ${porArea.map(([a, n]) => `<a class="atalho" href="#area-${a}" style="margin-bottom:8px"><span class="ic" style="background:${AREAS[a].cor}1a;color:${AREAS[a].cor}">${ico(a)}</span><div><b>${h(AREAS[a].nome)}</b><span>${plural(n, "prazo", "prazos")}</span></div></a>`).join("")}</div></div>
         <div class="card c8"><div class="card-cab"><h3>Atalhos</h3></div><div class="card-corpo"><div class="atalhos">
-          ${[["assistente", "Assistente IA", "Textos, dúvidas e dados"], ["condicionantes", "Condicionantes", "Agenda e calendário das licenças"], ["mapas", "Mapas", "Localização, AID/AII, hidrografia…"],
+          ${[["assistente", "Assistente IA", "Textos, dúvidas e dados"], ["prazos", "Prazos e vencimentos", "Licenças, documentos e obrigações"], ["mapas", "Mapas", "Localização, AID/AII, hidrografia…"],
              ["vistoria", "Vistoria de campo", "Checklist e fotos com GPS"], ["propostas", "Proposta", "Orçamento em PDF"], ["calculadoras", "Calculadoras", "APP, fossa, prazos, coordenadas"]]
             .map(([r, b, s]) => `<a class="atalho" href="#${r}"><span class="ic">${ico(r)}</span><div><b>${b}</b><span>${s}</span></div></a>`).join("")}
         </div></div></div>
@@ -412,7 +411,6 @@ const Olinpy = (() => {
       <div class="card c8"><div class="card-cab"><h3>Documentos, licenças e prazos</h3><span class="mut">${plural(itens.length, "item", "itens")}</span></div><div class="card-corpo" style="overflow-x:auto">
         ${itens.length ? `<table class="t"><thead><tr><th>Área</th><th>Documento / obrigação</th><th>Validade</th><th>Situação</th><th></th></tr></thead><tbody>${itens.sort((a, b) => (a.validade || "9").localeCompare(b.validade || "9")).map(linhaItem).join("")}</tbody></table>`
           : `<p class="vazio">Nenhum documento cadastrado. ${ed ? "Use “Documento / prazo” ou edite a empresa escolhendo o segmento." : ""}</p>`}
-        ${lics.length ? `<h4 style="margin:16px 0 6px">Licenças ambientais (escritório)</h4><ul class="lista">${lics.map((l) => `<li><div class="txt"><b>${h(l.tipoLong || l.tipo)} nº ${h(l.num)}</b><span>Emissão ${fd(l.emi)} · vence ${fd(l.ven)} · pedir renovação até ${fd(l.ren)} · ${plural(l.rows.length, "condicionante", "condicionantes")}</span></div><a class="btn claro peq" href="#condicionantes">Abrir</a></li>`).join("")}</ul>` : ""}
       </div></div>
       <div class="card c6"><div class="card-cab"><h3>Tarefas abertas</h3><a class="mut" href="#tarefas">todas</a></div><div class="card-corpo">
         ${tars.length ? `<ul class="lista">${tars.map((t) => `<li><div class="data"><b>${fd(t.prazo)}</b></div><div class="txt"><b>${h(t.titulo)}</b><span>${h(t.responsavel || "sem responsável")}</span></div></li>`).join("")}</ul>` : `<p class="vazio">Sem tarefas abertas.</p>`}</div></div>
@@ -491,7 +489,7 @@ const Olinpy = (() => {
         <select id="pfonte"><option value="">Todas as origens</option>${[["item", "Documentos"], ["licenca", "Licenças"], ["condicionante", "Condicionantes"]].map(([k, n]) => `<option value="${k}"${F.fonte === k ? " selected" : ""}>${n}</option>`).join("")}</select>
         <span class="mut" id="contP"></span></div>
       <div class="card" style="overflow-x:auto"><table class="t"><thead><tr><th>Data</th><th>O quê</th><th>Área</th><th>Origem</th><th>Situação</th></tr></thead><tbody id="tabP"></tbody></table></div>
-      <p class="mut" style="margin-top:10px">As condicionantes são marcadas como entregues no módulo <a href="#condicionantes">Condicionantes</a>. “Conferir” indica prazo que varia por órgão ou com divergência entre fontes.</p></div>`;
+      <p class="mut" style="margin-top:10px">Licenças e condicionantes entram como documentos de cada empresa (botão “Documento / prazo”). “Conferir” indica prazo que varia por órgão ou com divergência entre fontes.</p></div>`;
     $("#pq").addEventListener("input", (e) => { F.q = e.target.value; desenhar(); });
     $("#pst").addEventListener("change", (e) => { F.st = e.target.value; desenhar(); });
     $("#parea").addEventListener("change", (e) => { F.area = e.target.value; desenhar(); });
@@ -648,7 +646,7 @@ const Olinpy = (() => {
           <td>${l.econ !== null ? `<span class="tag ${l.econ > 0 ? "t-ok" : "t-atr"}">${l.econ}%</span>` : "—"}</td><td>${l.erM.toFixed(1)} → ${l.erO.toFixed(1)}</td><td>${l.n}</td></tr>`).join("")}</tbody></table>`
           : `<p class="vazio">Nenhuma medição ainda.</p>`}</div></div>
       <div class="card c4"><div class="card-cab"><h3>Nova medição</h3></div><div class="card-corpo"><form id="fMed" style="display:flex;flex-direction:column;gap:10px">
-        <label>Tarefa medida<input id="mT" list="mLista" required placeholder="Ex.: Montar calendário de condicionantes"><datalist id="mLista">${Object.keys(porTarefa).map((t) => `<option>${h(t)}</option>`).join("")}</datalist></label>
+        <label>Tarefa medida<input id="mT" list="mLista" required placeholder="Ex.: Montar calendário de prazos de um cliente"><datalist id="mLista">${Object.keys(porTarefa).map((t) => `<option>${h(t)}</option>`).join("")}</datalist></label>
         <label>Como foi feita<select id="mModo"><option value="manual">Manual (planilha, Word, papel)</option><option value="olinpy">Com o Olinpy</option></select></label>
         <div class="form"><label>Minutos<input id="mMin" type="number" min="1" required></label><label>Erros corrigidos<input id="mErr" type="number" min="0" value="0"></label></div>
         <label>Observação<input id="mObs"></label><button class="btn"${pode("editar") ? "" : " disabled"}>Registrar</button></form></div></div></div></div>`;

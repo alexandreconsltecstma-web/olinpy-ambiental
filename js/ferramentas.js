@@ -1,4 +1,4 @@
-/* Olinpy – ferramentas: assistente, condicionantes e mapas (embutidos), vistoria de campo, propostas,
+/* Olinpy – ferramentas: assistente, mapas (GeoMapa embutido), vistoria de campo, propostas,
    calculadoras e legislação. */
 "use strict";
 
@@ -83,11 +83,6 @@ function abrirImpressao(titulo, corpo) {
 
 const OlinpyTelas = {
   assistente: (c) => OlinpyIA.tela(c),
-
-  condicionantes(c) {
-    c.className = "conteudo cheio";
-    c.innerHTML = `<iframe src="painel/?embed=1" title="Painel de condicionantes"></iframe>`;
-  },
 
   mapas(c, emp) {
     c.className = "conteudo cheio";
