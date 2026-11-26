@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Olinpy – Assistente para consultorias ambientais</title>
+<meta name="description" content="Assistente de IA, licenças, condicionantes, mapas, vistorias e documentos para escritórios de consultoria ambiental.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='10' fill='%231f4d3a'/%3E%3Cpath d='M20 9c-6 4-9 9-9 14a9 9 0 0 0 18 0c0-5-3-10-9-14z' fill='%23c49a2c'/%3E%3Cpath d='M20 32V18' stroke='%231f4d3a' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="css/olinpy.css?v=1">
+</head>
+<body>
+
+<!-- ══ login ══════════════════════════════════════════════════════════ -->
+<section class="login" id="telaLogin" hidden>
+  <div class="login-arte">
+    <div class="marca"><svg class="logo-olinpy" viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="10" fill="rgba(255,255,255,.1)"/><path d="M20 8c-6.5 4.3-9.5 9.4-9.5 14.4a9.5 9.5 0 0 0 19 0C29.5 17.4 26.5 12.3 20 8z" fill="#c49a2c"/><path d="M20 32V17.5M20 23l-4-3M20 27l4.5-3.5" stroke="#10291f" stroke-width="2.2" stroke-linecap="round"/></svg>Olinpy</div>
+    <div>
+      <h1>Seu escritório de consultoria ambiental em um só lugar.</h1>
+      <p>Assistente de IA, licenças e condicionantes, obrigações legais, mapas técnicos, vistorias e documentos — tudo integrado.</p>
+      <ul>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.5 5 5.5.8-4 3.9.9 5.5L12 15.6 7.1 18.2l.9-5.5-4-3.9 5.5-.8z"/></svg>Assistente de IA treinado para licenciamento</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></svg>Prazos de condicionantes e obrigações sem esquecer nada</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2z"/></svg>Mapas prontos para o QGIS e relatórios de vistoria</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>Dados dos clientes protegidos por criptografia</li>
+      </ul>
+    </div>
+    <small>Olinpy · uso interno do escritório</small>
+  </div>
+  <div class="login-form">
+    <form id="fLogin" autocomplete="on">
+      <div>
+        <h2>Entrar</h2>
+        <p class="sub">Acesso restrito à equipe do escritório.</p>
+      </div>
+      <p class="login-erro" id="loginErro" role="alert" hidden></p>
+      <label>Usuário<input id="lUsuario" type="text" autocomplete="username" required autocapitalize="none" spellcheck="false"></label>
+      <label>Senha<input id="lSenha" type="password" autocomplete="current-password" required></label>
+      <button class="btn grande" id="lEntrar" type="submit">Entrar</button>
+      <p class="login-rodape">Os dados ficam criptografados e só abrem com usuário e senha. Ao fechar a aba, a sessão termina.</p>
+    </form>
+  </div>
+</section>
+
+<!-- ══ aplicativo ════════════════════════════════════════════════════ -->
+<div class="app" id="app" hidden>
+  <aside class="lateral" aria-label="Menu principal">
+    <a class="marca" href="#inicio"><svg class="logo-olinpy" viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="10" fill="rgba(255,255,255,.08)"/><path d="M20 8c-6.5 4.3-9.5 9.4-9.5 14.4a9.5 9.5 0 0 0 19 0C29.5 17.4 26.5 12.3 20 8z" fill="#c49a2c"/><path d="M20 32V17.5M20 23l-4-3M20 27l4.5-3.5" stroke="#10291f" stroke-width="2.2" stroke-linecap="round"/></svg><div><b>Olinpy</b><small>Consultoria ambiental</small></div></a>
+    <nav id="menu"></nav>
+    <div class="usuario"><span class="avatar" id="uAvatar"></span><div><b id="uNome"></b><small id="uPapel"></small></div>
+      <button id="bSair" type="button" title="Sair" aria-label="Sair"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3M10 17l5-5-5-5M15 12H3"/></svg></button></div>
+  </aside>
+  <div class="principal">
+    <header class="barra">
+      <button class="menu-movel" id="bMenu" type="button" aria-label="Abrir menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+      <div><h1 id="titulo"></h1></div><span class="sub" id="subtitulo"></span>
+      <div class="acoes" id="acoesBarra"></div>
+    </header>
+    <main class="conteudo" id="conteudo"></main>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<dialog id="dlg"><div class="dh"><div><b id="dlgT"></b><small id="dlgS"></small></div><button class="fechar" type="button" aria-label="Fechar" onclick="this.closest('dialog').close()">×</button></div><div class="db" id="dlgB"></div></dialog>
+
+<script src="js/cripto.js?v=1"></script>
+<script src="js/catalogo.js?v=1"></script>
+<script src="js/app.js?v=1"></script>
+<script src="js/ia.js?v=1"></script>
+<script src="js/ferramentas.js?v=1"></script>
+<script>Olinpy.iniciar();</script>
+</body>
+</html>
